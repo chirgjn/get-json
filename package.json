@@ -1,6 +1,6 @@
 {
   "name": "get-json",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simple ajax to fetch JSON",
   "main": "index.js",
   "scripts": {

@@ -1,29 +1,43 @@
 module.exports = function(url,data) {
   return (new Promise(function(resolve, reject) {
-    const request = new XMLHttpRequest()
+    const request = new XMLHttpRequest();
 
     request.addEventListener('load', function() {
       try {
-        const result = JSON.parse(this.responseText)
-        resolve(result)
+        const result = JSON.parse(this.responseText);
+        resolve(result);
       } catch (e) {
-        reject('invalid JSON')
+        reject('invalid JSON');
       }
     })
 
     request.addEventListener('error', function() {
-      reject(this.statusText)
+      reject(this.statusText);
     })
 
     request.addEventListener('abort', function() {
-      reject(this.statusText)
+      reject(this.statusText);
     })
 
-    request.open('GET',url,true)
-    request.setRequestHeader('Accept','application/json')
     if (typeof data === 'object') {
-      data = JSON.strigify()
+      var params = [];
+      for (let i in data) {
+        if (data.hasOwnProperty(i)) {
+          params.push(encodeURIComponent(i)+'='+encodeURIComponent(data[i]));
+        }
+      }
+      if (params.length) {
+        data = params.join('&');
+      } else {
+        data = undefined;
+      }
     }
-    request.send(data)
-  }))
-}
+
+    if (data) {
+      url += '?'+data;
+    }
+    request.open('GET',url,true);
+    request.setRequestHeader('Accept','application/json');
+    request.send();
+  }));
+};
